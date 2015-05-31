@@ -10,7 +10,7 @@
 * variable types: bool, float, string
 * constructions: "if" "if-else" "for"
 * delimiters: ";",",",":","."
-* keywords: "abstract", "class", "const", "int", "interface", "namespace", "null", "private", "protected",
+* keywords: "class", "const", "int", "namespace", "null", "private", "protected",
     "public", "return", "static", "throw", "using", "void"
 */
 
