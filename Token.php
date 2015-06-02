@@ -206,6 +206,10 @@ class Token {
                     return new Token("KEYWORD_CONST", 'const', $inputToken->row, $inputToken->col,
                         $inputToken->length);
                 }
+                if ($inputToken->text == "string") {
+                    return new Token("KEYWORD_STRING", 'string', $inputToken->row, $inputToken->col,
+                        $inputToken->length);
+                }
                 if ($inputToken->text == "int") {
                     return new Token("KEYWORD_INT", 'int', $inputToken->row, $inputToken->col,
                         $inputToken->length);
