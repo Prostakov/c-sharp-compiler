@@ -56,12 +56,9 @@ $rules = [
     'expression' => [
         ['expression', 'ARITHMETIC_OPERATOR_ADD', 'expression'],
         ['INT_VARIABLE'],
-        ['IDENTIFIER'],
     ],
 ];
 $syntaxAnalyzer = new SyntaxAnalyzer($rules, $tokens);
-//$syntaxAnalyzer->printRules();
-//$syntaxAnalyzer->printFlippedRules();
 $syntaxAnalyzer->process();
 
 

@@ -14,6 +14,7 @@ class Node {
 class SyntaxTree {
     public $topTreeLevel = [];
     public $rules = [];
+    public $iteration = 0;
 
     public function __construct($rules) {
         $this->rules = $rules;
@@ -21,10 +22,8 @@ class SyntaxTree {
 
     public function giveToken($token) {
         $this->topTreeLevel[] = new Node($token->type, $token->text);
-
-        echo $token->type.PHP_EOL;
-
         $this->wrapTree();
+//        $this->logTopLevel();
     }
 
     private function wrapTree() {
@@ -40,13 +39,14 @@ class SyntaxTree {
     }
 
     private function wrapNodes($nodes = [], $i) {
+//        $this->logNodes($nodes);
         $nodesRule = [];
         foreach($nodes as $node) {
             $nodesRule[] = $node->symbol;
         }
         foreach($this->rules as $production) {
             if ($production['rule'] == $nodesRule) {
-                $this->topTreeLevel = array_slice($this->topTreeLevel, 0, count($this->topTreeLevel)-$i+1);
+                $this->topTreeLevel = array_slice($this->topTreeLevel, 0, count($this->topTreeLevel)-$i);
                 $wrapNode = new Node($production['non-terminal'], '');
                 foreach($nodes as $node) $wrapNode->children[] = &$node;
                 $this->topTreeLevel[] = $wrapNode;
@@ -56,6 +56,17 @@ class SyntaxTree {
         return false;
     }
 
-    private function log() {
+    private function logNodes($nodes = []) {
+        echo '---------------------'.PHP_EOL;
+        echo 'Wrap iteration #'.$this->iteration.':'.PHP_EOL;
+        foreach ($nodes as $node) echo $node->symbol.PHP_EOL;
+        $this->iteration++;
+    }
+
+    private function logTopLevel() {
+        echo '---------------------'.PHP_EOL;
+        echo 'Wrap iteration #'.$this->iteration.':'.PHP_EOL;
+        foreach ($this->topTreeLevel as $item) echo $item->symbol.PHP_EOL;
+        $this->iteration++;
     }
 }
