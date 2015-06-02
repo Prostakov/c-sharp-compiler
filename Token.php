@@ -21,7 +21,7 @@ class Token {
     }
     
     public function __toString() {
-        return "<ID:" . $this->id . ", " . $this->type . ", '" . $this->text .
+        return "<" . $this->type . ", '" . $this->text .
           "', ROW:" . $this->row . ", COL:" . $this->col . ", LENGTH:" . $this->length . ">";
     }
 

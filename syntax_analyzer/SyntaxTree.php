@@ -28,7 +28,8 @@ class SyntaxTree {
 
     private function wrapTree() {
         $wrapMore = false;
-        for($i=1;$i<=count($this->topTreeLevel);$i++) {
+        for($i=count($this->topTreeLevel);$i>=1;$i--) {
+//        for($i=1;$i<=count($this->topTreeLevel);$i++) {
             if ($this->wrapNodes(array_slice($this->topTreeLevel, -$i), $i)) {
                 $wrapMore = true;
                 break;
