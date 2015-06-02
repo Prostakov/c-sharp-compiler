@@ -260,6 +260,7 @@ class Token {
                 }
                 break;
             case "COMMENT":
+                return $inputToken;
                 break;
             default:
                 throw new Exception("invalid token");

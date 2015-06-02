@@ -18,7 +18,7 @@ require_once('lexical_analyzer/ListLexer.php');
 require_once('syntax_analyzer/SyntaxAnalyzer.php');
 require_once('Token.php');
 
-$fileName = 'code_samples/file3.cs';
+$fileName = 'code_samples/file4.cs';
 //$fileName = $argv[1];
 $input = file_get_contents('./'.$fileName, true);
 echo '---------------------------------'.PHP_EOL;
@@ -29,7 +29,6 @@ $lexTokens = [];
 do {
     $token = $lexer->nextToken();
     $lexTokens[] = $token;
-    echo $token . "\n";
 } while ($token->type != Lexer::EOF_TYPE);
 echo '---------------------------------'.PHP_EOL;
 
@@ -38,11 +37,32 @@ Token::$count = 0;
 $tokens = [];
 foreach($lexTokens as $lexToken) {
     $token = Token::reformToken($lexToken);
-    $tokens[] = $token;
-    echo $token.PHP_EOL;
+    if ($token->type != 'COMMENT' && $token->type != '<EOF>') $tokens[] = $token;
 }
 
-
+$rules = [
+    's' => ['program'],
+    'program' => ['method'],
+    'method' => ['KEYWORD_PUBLIC','KEYWORD_VOID','IDENTIFIER','BRACKET_SIMPLE_LEFT','BRACKET_SIMPLE_RIGHT', 'block'],
+    'block' => ['BLOCK_OPEN','statements','BLOCK_CLOSE'],
+    'statements' => [
+        ['statements', 'statements'],
+        ['statement'],
+    ],
+    'statement' => [
+        ['KEYWORD_INT','IDENTIFIER','DELIMITER_DOTCOMA'],
+        ['IDENTIFIER','ASSIGNMENT_OPERATOR','expression','DELIMITER_DOTCOMA'],
+    ],
+    'expression' => [
+        ['expression', 'ARITHMETIC_OPERATOR_ADD', 'expression'],
+        ['INT_VARIABLE'],
+        ['IDENTIFIER'],
+    ],
+];
+$syntaxAnalyzer = new SyntaxAnalyzer($rules, $tokens);
+//$syntaxAnalyzer->printRules();
+//$syntaxAnalyzer->printFlippedRules();
+$syntaxAnalyzer->process();
 
 
 
