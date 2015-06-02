@@ -210,6 +210,10 @@ class Token {
                     return new Token("KEYWORD_INT", 'int', $inputToken->row, $inputToken->col,
                         $inputToken->length);
                 }
+                if ($inputToken->text == "float") {
+                    return new Token("KEYWORD_FLOAT", 'float', $inputToken->row, $inputToken->col,
+                        $inputToken->length);
+                }
                 if ($inputToken->text == "namespace") {
                     return new Token("KEYWORD_NAMESPACE", 'namespace', $inputToken->row, $inputToken->col,
                         $inputToken->length);

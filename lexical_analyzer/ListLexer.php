@@ -22,7 +22,7 @@ class ListLexer extends Lexer {
     const KEYWORD               = 15;
     const COMMENT               = 16;
 
-    static $keywords = array("class", "const", "int", "namespace", "array",
+    static $keywords = array("class", "const", "int", "float", "namespace", "array",
         "null", "private", "protected", "public", "return", "static", "throw", "using", "void", "case");
     static $constructions = array("if", "else", "for", "switch");
     static $booleanVariables = array("true", "false");
