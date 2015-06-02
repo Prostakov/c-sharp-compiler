@@ -48,12 +48,27 @@ class SyntaxTree {
             if ($production['rule'] == $nodesRule) {
                 $this->topTreeLevel = array_slice($this->topTreeLevel, 0, count($this->topTreeLevel)-$i);
                 $wrapNode = new Node($production['non-terminal'], '');
-                foreach($nodes as $node) $wrapNode->children[] = &$node;
+                foreach($nodes as $node) $wrapNode->children[] = $node;
                 $this->topTreeLevel[] = $wrapNode;
                 return true;
             }
         }
         return false;
+    }
+
+    public function printNode($node, $stringOffset = 0){
+        $stringOffset += 2;
+        echo str_repeat(' ', $stringOffset) . $node->symbol.PHP_EOL;
+        if (!empty($node->value)) echo str_repeat(' ', $stringOffset+2) . $node->value.PHP_EOL;
+        foreach ($node->children as $childNode) $this->printNode($childNode, $stringOffset);
+    }
+
+    public function printTree(){
+        if ($this->topTreeLevel[0]->symbol != 's'){
+            echo "Error parsing tree!";
+            return;
+        }
+        $this->printNode($this->topTreeLevel[0]);
     }
 
     private function logNodes($nodes = []) {

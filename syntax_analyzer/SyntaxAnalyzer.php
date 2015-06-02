@@ -18,9 +18,7 @@ class SyntaxAnalyzer {
         foreach($this->tokens as $token) {
             $tree->giveToken($token);
         }
-        foreach($tree->topTreeLevel as $item) {
-//            echo $item->symbol.PHP_EOL;
-        }
+        $tree->printTree();
     }
 
     private function flipRules() {
