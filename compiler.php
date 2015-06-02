@@ -18,7 +18,7 @@ require_once('lexical_analyzer/ListLexer.php');
 require_once('syntax_analyzer/SyntaxAnalyzer.php');
 require_once('Token.php');
 
-$fileName = 'code_samples/file4.cs';
+$fileName = 'code_samples/file5.cs';
 //$fileName = $argv[1];
 $input = file_get_contents('./'.$fileName, true);
 echo '---------------------------------'.PHP_EOL;
@@ -51,6 +51,51 @@ $rules = [
     ],
     'statement' => [
         ['KEYWORD_INT','IDENTIFIER','DELIMITER_DOTCOMA'],
+        ['IDENTIFIER','ASSIGNMENT_OPERATOR','expression','DELIMITER_DOTCOMA'],
+    ],
+    'expression' => [
+        ['expression', 'ARITHMETIC_OPERATOR_ADD', 'expression'],
+        ['INT_VARIABLE'],
+    ],
+];
+
+$rules = [
+    's' => ['program'],
+    'program' => [
+        ['using_directives','namespaces'],
+        ['namespaces'],
+    ],
+    'using_directives' => [
+        ['using_directives', 'using_directives'],
+        ['using_directive'],
+    ],
+    'using_directive' => [
+        ['KEYWORD_USING', 'method_application', 'DELIMITER_DOTCOMA'],
+        ['KEYWORD_USING', 'IDENTIFIER', 'DELIMITER_DOTCOMA'],
+    ],
+    'method_application' => [
+        ['method_application', 'DELIMITER_DOT', 'IDENTIFIER'],
+        ['IDENTIFIER', 'DELIMITER_DOT', 'IDENTIFIER'],
+    ],
+    'namespaces' => [
+        ['namespaces', 'namespace'],
+        ['namespace'],
+    ],
+    'namespace' => ['KEYWORD_NAMESPACE', 'IDENTIFIER', 'block'],
+    'block' => [
+        ['BLOCK_OPEN','classes','BLOCK_CLOSE'],
+        ['BLOCK_OPEN','statements','BLOCK_CLOSE'],
+    ],
+    'classes' => [
+        ['classes', 'class'],
+        ['class'],
+    ],
+    'class' => ['KEYWORD_CLASS', 'IDENTIFIER', 'block'],
+    'statements' => [
+        ['statements', 'statements'],
+        ['statement'],
+    ],
+    'statement' => [
         ['IDENTIFIER','ASSIGNMENT_OPERATOR','expression','DELIMITER_DOTCOMA'],
     ],
     'expression' => [

@@ -65,7 +65,8 @@ class SyntaxTree {
 
     public function printTree(){
         if ($this->topTreeLevel[0]->symbol != 's'){
-            echo "Error parsing tree!";
+            echo "Error parsing tree!".PHP_EOL;
+            foreach($this->topTreeLevel as $node) $this->printNode($node);
             return;
         }
         $this->printNode($this->topTreeLevel[0]);
