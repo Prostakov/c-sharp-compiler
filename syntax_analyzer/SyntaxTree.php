@@ -59,12 +59,14 @@ class SyntaxTree {
 
     public function printNode($node, $stringOffset = 0){
         $stringOffset += 2;
-        echo str_repeat(' ', $stringOffset) . $node->symbol.PHP_EOL;
+        echo str_repeat(' ', $stringOffset) . $node->symbol . '   ' . $this->iteration . PHP_EOL;
+        $this->iteration++;
         if (!empty($node->value)) echo str_repeat(' ', $stringOffset+2) . $node->value.PHP_EOL;
         foreach ($node->children as $childNode) $this->printNode($childNode, $stringOffset);
     }
 
     public function printTree(){
+        $this->iteration = 0;
         if ($this->topTreeLevel[0]->symbol != 's'){
             echo "Error parsing tree!".PHP_EOL;
             foreach($this->topTreeLevel as $node) $this->printNode($node);
