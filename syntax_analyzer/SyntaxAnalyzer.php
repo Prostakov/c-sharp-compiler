@@ -41,10 +41,6 @@ class SyntaxAnalyzer {
         $this->tree->printTree();
     }
 
-    private function flipRules() {
-
-    }
-
     public function printRules() {
         foreach($this->inputRules as $nonTerminal=>$productions) {
             echo $nonTerminal . ' => ';
