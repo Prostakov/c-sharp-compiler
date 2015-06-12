@@ -18,7 +18,6 @@ do {
     $lexTokens[] = $token;
 //    echo $token.PHP_EOL;
 } while ($token->type != Lexer::EOF_TYPE);
-echo '---------------------------------'.PHP_EOL;
 
 // Transform tokens and collect them into $tokens variable
 Token::$count = 0;
@@ -33,8 +32,6 @@ foreach($lexTokens as $lexToken) {
 //        echo $token.PHP_EOL;
     }
 }
-
-echo '---------------------------------'.PHP_EOL;
 
 $syntaxAnalyzer = new SyntaxAnalyzer($rules, $tokens);
 $syntaxAnalyzer->process();
