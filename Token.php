@@ -1,5 +1,19 @@
 <?php
 
+/* brackets ( )
+* program blocks { }
+* arithmetic operators: "+" "-" "*" "/", "|", "&", "++", "--";
+* assignment operators: "="
+* compare operators: "==" "!=" "<" ">" "<=" ">="
+* logical operators: "||" "!" "&&"
+* identifier (variable)
+* variable types: bool, float, string
+* constructions: "if" "if-else" "for"
+* delimiters: ";",",",":","."
+* keywords: "class", "const", "int", "namespace", "null", "private", "protected",
+    "public", "return", "static", "throw", "using", "void"
+*/
+
 class Token {
     public $type;
     public $text;
