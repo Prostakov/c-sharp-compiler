@@ -6,22 +6,11 @@ class SyntaxAnalyzer {
     public $inputRules = [];
     public $tokens = [];
     public $rules = [];
+    public $tree;
 
     public function __construct($inputRules = [], $inputTokens=[]) {
         $this->inputRules = $inputRules;
         $this->tokens = $inputTokens;
-        $this->flipRules();
-    }
-
-    public function process() {
-        $tree = new SyntaxTree($this->rules);
-        foreach($this->tokens as $token) {
-            $tree->giveToken($token);
-        }
-        $tree->printTree();
-    }
-
-    private function flipRules() {
         $flippedRules = [];
         foreach ($this->inputRules as $nonTerminal=>$productions) {
             if (is_array($productions[0])) {
@@ -39,6 +28,21 @@ class SyntaxAnalyzer {
             }
         }
         $this->rules = $flippedRules;
+        $this->tree = new SyntaxTree($this->rules);
+    }
+
+    public function process() {
+        foreach($this->tokens as $token) {
+            $this->tree->giveToken($token);
+        }
+    }
+
+    public function printResult() {
+        $this->tree->printTree();
+    }
+
+    private function flipRules() {
+
     }
 
     public function printRules() {

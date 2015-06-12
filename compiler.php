@@ -22,11 +22,14 @@ echo '---------------------------------'.PHP_EOL;
 
 // Transform tokens and collect them into $tokens variable
 Token::$count = 0;
+
 $tokens = [];
+$iterator = 1;
 foreach($lexTokens as $lexToken) {
     $token = Token::reformToken($lexToken);
     if ($token->type != 'COMMENT' && $token->type != '<EOF>') {
-        $tokens[] = $token;
+        $tokens[$iterator] = $token;
+        $iterator++;
 //        echo $token.PHP_EOL;
     }
 }
@@ -35,12 +38,7 @@ echo '---------------------------------'.PHP_EOL;
 
 $syntaxAnalyzer = new SyntaxAnalyzer($rules, $tokens);
 $syntaxAnalyzer->process();
-
-
-
-
-
-
+$syntaxAnalyzer->printResult();
 
 
 
