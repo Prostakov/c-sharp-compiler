@@ -37,6 +37,10 @@ class SyntaxAnalyzer {
         }
     }
 
+    public function processContextAnalyzer() {
+        $this->tree->processContextAnalyzer();
+    }
+
     public function printResult() {
         $this->tree->printTree();
     }

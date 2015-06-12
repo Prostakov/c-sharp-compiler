@@ -77,6 +77,10 @@ class SyntaxTree {
         $this->printNode($this->topTreeLevel[0]);
     }
 
+    public function processContextAnalyzer() {
+        
+    }
+
     private function logNodes($nodes = []) {
         echo '---------------------'.PHP_EOL;
         echo 'Wrap iteration #'.$this->iteration.':'.PHP_EOL;
