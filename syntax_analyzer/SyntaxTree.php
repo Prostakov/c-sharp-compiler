@@ -17,6 +17,7 @@ class SyntaxTree {
     public $topTreeLevel = [];
     public $rules = [];
     public $iteration = 0;
+    public $treeArray = [];
 
     public function __construct($rules) {
         $this->rules = $rules;
@@ -77,8 +78,22 @@ class SyntaxTree {
         $this->printNode($this->topTreeLevel[0]);
     }
 
-    public function processContextAnalyzer() {
-        
+    private function populateTreeArray($node) {
+        $item = [];
+        $item['symbol'] = $node->symbol;
+        $item['value'] = $node->value;
+        $item['tokenID'] = $node->tokenID;
+        $this->treeArray[] = $item;
+        foreach($node->children as $childNode) $this->populateTreeArray($childNode);
+    }
+
+    public function getTreeAsArray() {
+        if ($this->topTreeLevel[0]->symbol != 's'){
+            echo "Error parsing tree!".PHP_EOL;
+            return [];
+        }
+        $this->populateTreeArray($this->topTreeLevel[0]);
+        return $this->treeArray;
     }
 
     private function logNodes($nodes = []) {

@@ -35,9 +35,11 @@ foreach($lexTokens as $lexToken) {
 
 $syntaxAnalyzer = new SyntaxAnalyzer($rules, $tokens);
 $syntaxAnalyzer->process();
-$syntaxAnalyzer->printResult();
+//$syntaxAnalyzer->printResult();
 
+$syntaxTreeArray = $syntaxAnalyzer->getTreeAsArray();
 
+print_r($syntaxTreeArray);
 
 
 
