@@ -1,9 +1,10 @@
 <?php
 
+require_once('Token.php');
 require_once('lexical_analyzer/ListLexer.php');
 require_once('syntax_analyzer/SyntaxAnalyzer.php');
 require_once('syntax_analyzer/rules.php');
-require_once('Token.php');
+require_once('context_analyzer/ContextAnalyzer.php');
 
 
 $fileName = 'code_samples/file2.cs';
@@ -38,9 +39,12 @@ $syntaxAnalyzer->process();
 //$syntaxAnalyzer->printResult();
 
 $syntaxTreeArray = $syntaxAnalyzer->getTreeAsArray();
+//print_r($syntaxTreeArray);
 
-print_r($syntaxTreeArray);
+$contextAnalyzer = new ContextAnalyzer($syntaxTreeArray);
+$contextAnalyzer->process();
 
+print_r($contextAnalyzer->blocks);
 
 
 
