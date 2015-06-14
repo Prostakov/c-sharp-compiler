@@ -41,10 +41,6 @@ class SyntaxAnalyzer {
         $this->tree->printTree();
     }
 
-    public function getTreeAsArray() {
-        return $this->tree->getTreeAsArray();
-    }
-
     public function printRules() {
         foreach($this->inputRules as $nonTerminal=>$productions) {
             echo $nonTerminal . ' => ';
