@@ -39,6 +39,9 @@ $syntaxAnalyzer->process();
 //$syntaxAnalyzer->printResult();
 
 $contextAnalyzer = new ContextAnalyzer($syntaxAnalyzer->getTree());
+$contextAnalyzer->traverse();
+
+print_r($contextAnalyzer->blocks);
 
 
 
