@@ -115,6 +115,19 @@ class ContextAnalyzer {
         $this->logLine += 1;
 //        echo $this->logLine.'. '.$msg.PHP_EOL;
     }
+
+    public function printInfoAboutVariables() {
+        foreach($this->variableDeclarationArray as $blockID => $vars) {
+            foreach ($vars as $varID => $varName) {
+                echo 'VARIABLE_'.$varID.': '.$varName.', declared in BLOCK_'.$blockID.PHP_EOL;
+                echo '  Used in:'.PHP_EOL;
+                foreach($this->variableUsageArray as $usageBlockID => $usageVars) {
+                    if (isset($usageVars[$varID]))
+                        echo '    BLOCK_'.$usageBlockID.': '.$usageVars[$varID].' time(s).'.PHP_EOL;
+                }
+            }
+        }
+    }
 }
 
 
