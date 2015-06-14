@@ -88,6 +88,8 @@ $rules = [
     'expression' => [
         ['expression', 'arithmetic', 'expression'],
         ['IDENTIFIER', 'arithmetic', 'IDENTIFIER'],
+        ['IDENTIFIER', 'arithmetic', 'expression'],
+        ['expression', 'arithmetic', 'IDENTIFIER'],
         ['IDENTIFIER', 'inc_operator'],
         ['INT_VARIABLE'],
         ['FLOAT_VARIABLE'],
