@@ -33,18 +33,46 @@ class ContextAnalyzer {
             $this->lastBlockID += 1;
             $this->blocks[$this->lastBlockID] = array_merge([$this->currentBlockID], $this->blocks[$this->currentBlockID]);
             $this->currentBlockID = $this->lastBlockID;
+            foreach ($node->children as $childNode) $this->traverseNode($childNode);
         } elseif ($node->symbol === 'BLOCK_CLOSE') {
             $this->currentBlockID = $this->blocks[$this->currentBlockID][0];
+            foreach ($node->children as $childNode) $this->traverseNode($childNode);
+        } elseif ($node->symbol === 'statement') {
+            foreach ($node->children as $childNode) $this->traverseStatement($childNode);
+        } else {
+            foreach ($node->children as $childNode) $this->traverseNode($childNode);
         }
-        foreach ($node->children as $childNode) $this->traverseNode($childNode);
     }
 
-    private function traverseStatement(){
-
+    private function traverseStatement($node){
+        if ($node->symbol === 'block') {
+            $this->lastBlockID += 1;
+            $this->blocks[$this->lastBlockID] = array_merge([$this->currentBlockID], $this->blocks[$this->currentBlockID]);
+            $this->currentBlockID = $this->lastBlockID;
+            foreach ($node->children as $childNode) $this->traverseNode($childNode);
+        } elseif ($node->symbol === 'BLOCK_CLOSE') {
+            $this->currentBlockID = $this->blocks[$this->currentBlockID][0];
+            foreach ($node->children as $childNode) $this->traverseNode($childNode);
+        } elseif ($node->symbol === 'variable') {
+            foreach ($node->children as $childNode) $this->traverseVariableDeclaration($childNode);
+        } elseif ($node->symbol === 'expression') {
+            foreach ($node->children as $childNode) $this->traverseStatement($childNode);
+        } elseif ($node->symbol === 'IDENTIFIER') {
+            // TODO check using
+        } else {
+            foreach ($node->children as $childNode) $this->traverseStatement($childNode);
+        }
     }
 
-    private function traverseVariableDeclaration() {
-
+    private function traverseVariableDeclaration($node) {
+        if ($node->symbol === 'IDENTIFIER') {
+            // TODO check redeclaration
+            foreach ($node->children as $childNode) $this->traverseVariableDeclaration($childNode);
+        } elseif ($node->symbol === 'expression') {
+            $this->traverseStatement($node);
+        } else {
+            foreach ($node->children as $childNode) $this->traverseVariableDeclaration($childNode);
+        }
     }
 }
 
