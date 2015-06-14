@@ -1,15 +1,19 @@
 <?php
 
 class Node {
-    public $tokenID;
     public $symbol;
     public $value;
     public $children = [];
+    public $row;
+    public $col;
+    public $length;
 
-    public function __construct($symbol, $value, $tokenID = null) {
+    public function __construct($symbol, $value, $row = null, $col = null, $length = null) {
         $this->symbol = $symbol;
         $this->value = $value;
-        $this->tokenID = $tokenID;
+        $this->row = $row;
+        $this->col = $col;
+        $this->length = $length;
     }
 }
 
@@ -22,8 +26,8 @@ class SyntaxTree {
         $this->rules = $rules;
     }
 
-    public function giveToken($tokenID, $token) {
-        $this->topTreeLevel[] = new Node($token->type, $token->text, $tokenID);
+    public function giveToken($token) {
+        $this->topTreeLevel[] = new Node($token->type, $token->text, $token->row, $token->col, $token->length);
         $this->wrapTree();
 //        $this->logTopLevel();
     }

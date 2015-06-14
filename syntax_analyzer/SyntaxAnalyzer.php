@@ -32,8 +32,8 @@ class SyntaxAnalyzer {
     }
 
     public function process() {
-        foreach($this->tokens as $tokenID => $token) {
-            $this->tree->giveToken($tokenID, $token);
+        foreach($this->tokens as $token) {
+            $this->tree->giveToken($token);
         }
     }
 
