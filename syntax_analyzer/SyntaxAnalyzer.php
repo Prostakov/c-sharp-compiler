@@ -37,6 +37,10 @@ class SyntaxAnalyzer {
         }
     }
 
+    public function getTree() {
+        return $this->tree->topTreeLevel;
+    }
+
     public function printResult() {
         $this->tree->printTree();
     }
