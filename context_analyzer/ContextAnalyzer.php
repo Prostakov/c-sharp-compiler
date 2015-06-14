@@ -10,9 +10,11 @@ class ContextAnalyzer {
     private $currentBlockID = null;
     private $lastBlockID = 0;
 
-    private $variableDeclaration = [];
-    private $lastDeclaredVarID = null;
-    private $variableUsage = [];
+    public $variableDeclarationArray = [];
+    private $lastDeclaredVarID = 0;
+    public $variableUsageArray = [];
+
+    public $logLine = 0;
 
     public function __construct($tree = null) {
         if (is_null($tree)) throw new Exception('Tree is no tree to analyze!');
@@ -29,6 +31,7 @@ class ContextAnalyzer {
     }
 
     private function traverseNode($node){
+        $this->log('traversing node: '.$node->symbol);
         if ($node->symbol === 'namespace_block' || $node->symbol === 'block') {
             $this->lastBlockID += 1;
             $this->blocks[$this->lastBlockID] = array_merge([$this->currentBlockID], $this->blocks[$this->currentBlockID]);
@@ -36,7 +39,10 @@ class ContextAnalyzer {
             foreach ($node->children as $childNode) $this->traverseNode($childNode);
         } elseif ($node->symbol === 'BLOCK_CLOSE') {
             $this->currentBlockID = $this->blocks[$this->currentBlockID][0];
-            foreach ($node->children as $childNode) $this->traverseNode($childNode);
+            foreach ($node->children as $childNode) {
+                $this->traverseNode($childNode);
+            }
+        } elseif ($node->symbol === 'using_directive') {
         } elseif ($node->symbol === 'statement') {
             foreach ($node->children as $childNode) $this->traverseStatement($childNode);
         } else {
@@ -45,6 +51,7 @@ class ContextAnalyzer {
     }
 
     private function traverseStatement($node){
+        $this->log('traversing statement: '.$node->symbol);
         if ($node->symbol === 'block') {
             $this->lastBlockID += 1;
             $this->blocks[$this->lastBlockID] = array_merge([$this->currentBlockID], $this->blocks[$this->currentBlockID]);
@@ -54,25 +61,59 @@ class ContextAnalyzer {
             $this->currentBlockID = $this->blocks[$this->currentBlockID][0];
             foreach ($node->children as $childNode) $this->traverseNode($childNode);
         } elseif ($node->symbol === 'variable') {
-            foreach ($node->children as $childNode) $this->traverseVariableDeclaration($childNode);
+            // traversing variable subtree from right to left
+            for ($i = count($node->children) - 1; $i > -1; $i--) {
+                $this->traverseVariableDeclaration($node->children[$i]);
+            }
         } elseif ($node->symbol === 'expression') {
             foreach ($node->children as $childNode) $this->traverseStatement($childNode);
         } elseif ($node->symbol === 'IDENTIFIER') {
-            // TODO check using
+            // check declaration
+            $variableID = $this->getVariable($node, $this->blocks[$this->currentBlockID]);
+            if (isset($this->variableUsageArray[$this->currentBlockID][$variableID])) {
+                $this->variableUsageArray[$this->currentBlockID][$variableID] += 1;
+            } else {
+                $this->variableUsageArray[$this->currentBlockID][$variableID] = 1;
+            }
+        } elseif ($node->symbol === 'method') {
+            $this->traverseNode(end($node->children));
+        } elseif ($node->symbol === 'method_application') {
         } else {
             foreach ($node->children as $childNode) $this->traverseStatement($childNode);
         }
     }
 
     private function traverseVariableDeclaration($node) {
+        $this->log('traversing var declaration: '.$node->symbol);
         if ($node->symbol === 'IDENTIFIER') {
-            // TODO check redeclaration
-            foreach ($node->children as $childNode) $this->traverseVariableDeclaration($childNode);
+            if (isset($this->variableDeclarationArray[$this->currentBlockID]))
+                foreach($this->variableDeclarationArray[$this->currentBlockID] as $varID => $value) {
+                    if ($value === $node->value)
+                        throw new Exception('Duplicate declaration at block #'.$this->currentBlockID);
+                }
+            $this->lastDeclaredVarID += 1;
+            $this->variableDeclarationArray[$this->currentBlockID][$this->lastDeclaredVarID] = $node->value;
         } elseif ($node->symbol === 'expression') {
             $this->traverseStatement($node);
         } else {
             foreach ($node->children as $childNode) $this->traverseVariableDeclaration($childNode);
         }
+    }
+
+    private function getVariable($node, $blockIDs) {
+        $blockIDs = array_merge([$this->currentBlockID],$blockIDs);
+        foreach($blockIDs as $blockID) {
+            if (isset($this->variableDeclarationArray[$blockID]))
+                foreach($this->variableDeclarationArray[$blockID] as $varID => $value) {
+                    if ($node->value === $value) return $varID;
+                }
+        }
+        throw new Exception('Variable '.$node->value.' has not been declared! Line #'.$node->row);
+    }
+
+    private function log($msg) {
+        $this->logLine += 1;
+//        echo $this->logLine.'. '.$msg.PHP_EOL;
     }
 }
 

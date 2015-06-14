@@ -41,7 +41,9 @@ $syntaxAnalyzer->process();
 $contextAnalyzer = new ContextAnalyzer($syntaxAnalyzer->getTree());
 $contextAnalyzer->traverse();
 
-print_r($contextAnalyzer->blocks);
+//print_r($contextAnalyzer->blocks);
+print_r($contextAnalyzer->variableDeclarationArray);
+print_r($contextAnalyzer->variableUsageArray);
 
 
 
