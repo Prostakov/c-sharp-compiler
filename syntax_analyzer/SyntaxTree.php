@@ -17,7 +17,6 @@ class SyntaxTree {
     public $topTreeLevel = [];
     public $rules = [];
     public $iteration = 0;
-    public $treeArray = [];
 
     public function __construct($rules) {
         $this->rules = $rules;
