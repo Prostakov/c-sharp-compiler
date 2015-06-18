@@ -69,6 +69,8 @@ class CodeGenerator {
         } elseif ($node->symbol === 'using_directive') {
         } elseif ($node->symbol === 'statement') {
             foreach ($node->children as $childNode) $this->traverseStatement($childNode);
+//            $this->wrapStatement($this->statementStack);
+            $this->statementStack = [];
         } else {
             foreach ($node->children as $childNode) $this->traverseNode($childNode);
         }
@@ -76,6 +78,12 @@ class CodeGenerator {
 
     private $statementStack = [];
     private function wrapStatement($statementStack){
+        if (empty($statementStack)){
+            return;
+        }
+        elseif (count($statementStack) === 4) {
+            $this->tetrads[] = new Tetrad($statementStack[1]->value, $statementStack[2]->value, '-', $statementStack[0]->value);
+        }
     }
     private function traverseStatement($node){
         $this->log('Traversing statement: '.$node->symbol . '   ---   '.$node->value);
@@ -87,12 +95,16 @@ class CodeGenerator {
         } elseif ($node->symbol === 'BLOCK_CLOSE') {
             $this->currentBlockID = $this->blocks[$this->currentBlockID][0];
             foreach ($node->children as $childNode) $this->traverseNode($childNode);
-        } elseif ($node->symbol === 'variable') {
+//        } elseif ($node->symbol === 'variable') {
+//            foreach ($node->children as $childNode) $this->traverseVariableDeclaration($childNode);
+//            $this->wrapVariableDeclaration($this->variableDeclarationstack);
+//            $this->variableDeclarationstack = [];
         } elseif ($node->symbol === 'expression') {
             foreach ($node->children as $childNode) $this->traverseExpression($childNode);
             $this->statementStack[] = $this->wrapExpression($this->expressionStack);
             $this->expressionStack = [];
-//        } elseif ($node->symbol === 'IDENTIFIER') {
+//        } elseif ($node->symbol === 'IDENTIFIER' || 'ASSIGNMENT_OPERATOR') {
+//            $this->statementStack[] = $node;
 //        } elseif ($node->symbol === 'method') {
 //        } elseif ($node->symbol === 'method_application') {
         } else {
@@ -132,6 +144,28 @@ class CodeGenerator {
                 $this->expressionStack[] = new Node('ARITHMETIC_OPERATOR_SUBTRACT', '-');
             }
             $this->expressionStack[] = new Node('INT_VARIABLE', '1');
+        }
+    }
+
+    private $variableDeclarationstack = [];
+    private function wrapVariableDeclaration($variableDeclarationStack) {
+        $this->log('wrapping variable declaration...');
+        if (count($variableDeclarationStack) === 3)
+            return null;
+        else {
+            $this->tetrads[] = new Tetrad($variableDeclarationStack[2]->value, $variableDeclarationStack[3]->value, '-', $variableDeclarationStack[1]->value);
+        }
+    }
+    private function traverseVariableDeclaration($node){
+        $this->log('traversing var declaration');
+        if ($node->symbol === 'identifiers') {
+            $this->variableDeclarationstack[] = new Node('identifiers', '');
+        } elseif ($node->symbol === 'expression') {
+            foreach ($node->children as $childNode) $this->traverseExpression($childNode);
+            $this->variableDeclarationstack[] = $this->wrapExpression($this->expressionStack);
+            $this->expressionStack = [];
+        } else {
+            $this->variableDeclarationstack[] = $node;
         }
     }
 
