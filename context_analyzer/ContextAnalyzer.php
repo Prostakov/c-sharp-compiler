@@ -2,10 +2,7 @@
 
 class ContextAnalyzer {
     private $tree;
-
-    // Tree can be traversed in three modes: standard, variable, statement
-    private $treeMode = 'standard';
-
+    
     public $blocks = [];
     private $currentBlockID = null;
     private $lastBlockID = 0;

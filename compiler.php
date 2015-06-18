@@ -38,14 +38,17 @@ $syntaxAnalyzer = new SyntaxAnalyzer($rules, $tokens);
 $syntaxAnalyzer->process();
 //$syntaxAnalyzer->printResult();
 
+//return;
+
 $contextAnalyzer = new ContextAnalyzer($syntaxAnalyzer->getTree());
 $contextAnalyzer->traverse();
 
 //print_r($contextAnalyzer->blocks);
 //print_r($contextAnalyzer->variableDeclarationArray);
 //print_r($contextAnalyzer->variableUsageArray);
-$contextAnalyzer->printInfoAboutVariables();
+//$contextAnalyzer->printInfoAboutVariables();
 
+$codeGenerator = new CodeGenerator($syntaxAnalyzer->getTree());
 
 
 
