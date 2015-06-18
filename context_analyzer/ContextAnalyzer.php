@@ -2,7 +2,7 @@
 
 class ContextAnalyzer {
     private $tree;
-    
+
     public $blocks = [];
     private $currentBlockID = null;
     private $lastBlockID = 0;

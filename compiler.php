@@ -48,7 +48,7 @@ $contextAnalyzer->traverse();
 //print_r($contextAnalyzer->variableUsageArray);
 //$contextAnalyzer->printInfoAboutVariables();
 
-$codeGenerator = new CodeGenerator($syntaxAnalyzer->getTree());
+$codeGenerator = new CodeGenerator($syntaxAnalyzer->getTree(), $contextAnalyzer->variableDeclarationArray);
 
 
 
