@@ -5,6 +5,7 @@ require_once('lexical_analyzer/ListLexer.php');
 require_once('syntax_analyzer/SyntaxAnalyzer.php');
 require_once('syntax_analyzer/rules.php');
 require_once('context_analyzer/ContextAnalyzer.php');
+require_once('code_generator/CodeGenerator.php');
 
 
 $fileName = 'code_samples/file2.cs';
@@ -37,7 +38,6 @@ foreach($lexTokens as $lexToken) {
 $syntaxAnalyzer = new SyntaxAnalyzer($rules, $tokens);
 $syntaxAnalyzer->process();
 //$syntaxAnalyzer->printResult();
-
 //return;
 
 $contextAnalyzer = new ContextAnalyzer($syntaxAnalyzer->getTree());
@@ -49,8 +49,8 @@ $contextAnalyzer->traverse();
 //$contextAnalyzer->printInfoAboutVariables();
 
 $codeGenerator = new CodeGenerator($syntaxAnalyzer->getTree(), $contextAnalyzer->variableDeclarationArray);
-
-
+$codeGenerator->traverse();
+$codeGenerator->printTetrads();
 
 
 
