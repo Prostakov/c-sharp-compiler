@@ -69,7 +69,7 @@ $rules = [
         ['method'],
         ['IDENTIFIER','ASSIGNMENT_OPERATOR','expression','DELIMITER_DOTCOMA'],
         ['method_application', 'operand', 'DELIMITER_DOTCOMA'],
-        ['IDENTIFIER','ASSIGNMENT_OPERATOR', 'method_application', 'BRACKET_SIMPLE_LEFT', 'method_application', 'operand', 'BRACKET_SIMPLE_RIGHT', 'DELIMITER_DOTCOMA'],
+//        ['IDENTIFIER','ASSIGNMENT_OPERATOR', 'method_application', 'BRACKET_SIMPLE_LEFT', 'method_application', 'operand', 'BRACKET_SIMPLE_RIGHT', 'DELIMITER_DOTCOMA'],
         ['CONSTRUCTION_FOR', 'BRACKET_SIMPLE_LEFT', 'for_operands', 'BRACKET_SIMPLE_RIGHT', 'block'],
     ],
     'for_operands' => [
