@@ -41,7 +41,11 @@ class CodeGenerator {
     }
 
     public function printTetrads() {
-        foreach($this->tetrads as $tetrad) echo $tetrad.PHP_EOL;
+        $i = 1;
+        foreach($this->tetrads as $tetrad) {
+            echo sprintf('%2u',$i).'. '.$tetrad.PHP_EOL;
+            $i++;
+        }
     }
 
     public function __construct($tree = null, $variables = null) {
@@ -70,6 +74,10 @@ class CodeGenerator {
         } elseif ($node->symbol === 'BLOCK_CLOSE') {
 //            $this->currentBlockID = $this->blocks[$this->currentBlockID][0];
         } elseif ($node->symbol === 'using_directive') {
+        } elseif ($node->symbol === 'class') {
+            $this->tetrads[] = new Tetrad('label', $node->children[0]->value.'_'.$node->children[1]->value);
+            foreach ($node->children[3]->children as $childNode) $this->traverseNode($childNode);
+            $this->tetrads[] = new Tetrad('label', 'after_'.$node->children[0]->value.'_'.$node->children[1]->value);
         } elseif ($node->symbol === 'statement') {
             foreach ($node->children as $childNode) $this->traverseStatement($childNode);
             $this->wrapStatement($this->statementStack);
@@ -116,13 +124,13 @@ class CodeGenerator {
             $this->expressionStack = [];
         } elseif ($node->symbol === 'for_operator') {
             $loopName = $this->getNewLoopID();
-            $this->tetrads[] = new Tetrad('label', 'label_'.$loopName.'_start');
+            $this->tetrads[] = new Tetrad('label', $loopName.'_start');
             foreach ($node->children[4]->children as $childNode) $this->traverseNode($childNode);
-            $this->tetrads[] = new Tetrad('label', 'label_'.$loopName.'_end');
+            $this->tetrads[] = new Tetrad('label', $loopName.'_end');
         } elseif ($node->symbol === 'method') {
-            $this->tetrads[] = new Tetrad('label', 'label_'.$node->children[0]->value.'_'.$node->children[1]->value.'_'.$node->children[2]->value);
+            $this->tetrads[] = new Tetrad('label', $node->children[0]->value.'_'.$node->children[1]->value.'_'.$node->children[2]->value);
             foreach($node->children[4]->children as $childNode) $this->traverseNode($childNode);
-            $this->tetrads[] = new Tetrad('label', 'label_after_'.$node->children[0]->value.'_'.$node->children[1]->value.'_'.$node->children[2]->value);
+            $this->tetrads[] = new Tetrad('label', 'after_'.$node->children[0]->value.'_'.$node->children[1]->value.'_'.$node->children[2]->value);
         } elseif ($node->symbol === 'method_application') {
             foreach($node->children[4]->children as $childNode) $this->traverseMetodApplicationName($childNode);
             $this->wrapMethodApplication();
