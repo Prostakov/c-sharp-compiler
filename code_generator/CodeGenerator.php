@@ -69,7 +69,7 @@ class CodeGenerator {
         } elseif ($node->symbol === 'using_directive') {
         } elseif ($node->symbol === 'statement') {
             foreach ($node->children as $childNode) $this->traverseStatement($childNode);
-//            $this->wrapStatement($this->statementStack);
+            $this->wrapStatement($this->statementStack);
             $this->statementStack = [];
         } else {
             foreach ($node->children as $childNode) $this->traverseNode($childNode);
