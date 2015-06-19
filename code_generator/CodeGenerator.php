@@ -74,6 +74,10 @@ class CodeGenerator {
         } elseif ($node->symbol === 'BLOCK_CLOSE') {
 //            $this->currentBlockID = $this->blocks[$this->currentBlockID][0];
         } elseif ($node->symbol === 'using_directive') {
+        } elseif ($node->symbol === 'namespace') {
+            $this->tetrads[] = new Tetrad('label', $node->children[0]->value.'_'.$node->children[1]->value);
+            foreach ($node->children[2]->children as $childNode) $this->traverseNode($childNode);
+            $this->tetrads[] = new Tetrad('label', 'after_'.$node->children[0]->value.'_'.$node->children[1]->value);
         } elseif ($node->symbol === 'class') {
             $this->tetrads[] = new Tetrad('label', $node->children[0]->value.'_'.$node->children[1]->value);
             foreach ($node->children[3]->children as $childNode) $this->traverseNode($childNode);
