@@ -24,6 +24,7 @@ class CodeGenerator {
     public $tetrads = [];
 
     public $lastTempVarID = 0;
+    public $lastLoopID= 0;
 
     public $blocks = [];
     private $currentBlockID = null;
@@ -32,6 +33,11 @@ class CodeGenerator {
     private function getNewVarName() {
         $this->lastTempVarID += 1;
         return 'temp_variable_'.$this->lastTempVarID;
+    }
+
+    private function getNewLoopID() {
+        $this->lastLoopID += 1;
+        return 'loop_'.$this->lastLoopID;
     }
 
     public function printTetrads() {
@@ -109,7 +115,10 @@ class CodeGenerator {
             $this->statementStack[] = $this->wrapExpression($this->expressionStack);
             $this->expressionStack = [];
         } elseif ($node->symbol === 'for_operator') {
+            $loopName = $this->getNewLoopID();
+            $this->tetrads[] = new Tetrad('label', 'label_'.$loopName.'_start');
             foreach ($node->children[4]->children as $childNode) $this->traverseNode($childNode);
+            $this->tetrads[] = new Tetrad('label', 'label_'.$loopName.'_end');
         } elseif ($node->symbol === 'method') {
             $this->tetrads[] = new Tetrad('label', 'label_'.$node->children[0]->value.'_'.$node->children[1]->value.'_'.$node->children[2]->value);
             foreach($node->children[4]->children as $childNode) $this->traverseNode($childNode);
