@@ -54,7 +54,7 @@ $rules = [
         ['BRACKET_SIMPLE_LEFT', 'IDENTIFIER', 'BRACKET_SIMPLE_RIGHT'],
         ['BRACKET_SIMPLE_LEFT', 'expression', 'BRACKET_SIMPLE_RIGHT'],
         ['BRACKET_SIMPLE_LEFT', 'STRING_VARIABLE', 'BRACKET_SIMPLE_RIGHT'],
-        ['BRACKET_SIMPLE_LEFT', 'method_application', 'BRACKET_SIMPLE_RIGHT'],
+//        ['BRACKET_SIMPLE_LEFT', 'method_application', 'BRACKET_SIMPLE_RIGHT'],
     ],
     'block' => [
         ['BLOCK_OPEN','statements','BLOCK_CLOSE'],
@@ -68,7 +68,7 @@ $rules = [
         ['variable'],
         ['method'],
         ['IDENTIFIER','ASSIGNMENT_OPERATOR','expression','DELIMITER_DOTCOMA'],
-//        ['method_application', 'operand', 'DELIMITER_DOTCOMA'],
+        ['method_application', 'operand', 'DELIMITER_DOTCOMA'],
 //        ['IDENTIFIER','ASSIGNMENT_OPERATOR', 'method_application', 'BRACKET_SIMPLE_LEFT', 'method_application', 'operand', 'BRACKET_SIMPLE_RIGHT', 'DELIMITER_DOTCOMA'],
         ['CONSTRUCTION_FOR', 'BRACKET_SIMPLE_LEFT', 'for_operands', 'BRACKET_SIMPLE_RIGHT', 'block'],
     ],
