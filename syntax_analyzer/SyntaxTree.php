@@ -15,6 +15,10 @@ class Node {
         $this->col = $col;
         $this->length = $length;
     }
+
+    public function __toString() {
+        return $this->value;
+    }
 }
 
 class SyntaxTree {
